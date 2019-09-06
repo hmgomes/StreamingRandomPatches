@@ -1,33 +1,27 @@
-# MOA (Massive Online Analysis)
-[![Build Status](https://travis-ci.org/Waikato/moa.svg?branch=master)](https://travis-ci.org/Waikato/moa)
-[![Maven Central](https://img.shields.io/maven-central/v/nz.ac.waikato.cms.moa/moa-pom.svg)](https://mvnrepository.com/artifact/nz.ac.waikato.cms)
-[![DockerHub](https://img.shields.io/badge/docker-available-blue.svg?logo=docker)](https://hub.docker.com/r/waikato/moa)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+# StreamingRandomPatches
+Repository for the StreamingRandomPatches (also known as SRP) algorithm implemented (originally) in MOA 2017.10. 
+The algorithm has been ported to MOA 2019.04 in this repository. 
 
-![MOA][logo]
+The Streaming Random Patches (SRP) algorithm is going to be added to MOA in the near future.
+Until that, you may use this repository to have access to its source code. 
 
-[logo]: http://moa.cms.waikato.ac.nz/wp-content/uploads/2014/11/LogoMOA.jpg "Logo MOA"
+For more informations about MOA, check out the official website: 
+http://moa.cms.waikato.ac.nz
 
-MOA is the most popular open source framework for data stream mining, with a very active growing community ([blog](http://moa.cms.waikato.ac.nz/blog/)). It includes a collection of machine learning algorithms (classification, regression, clustering, outlier detection, concept drift detection and recommender systems) and tools for evaluation. Related to the WEKA project, MOA is also written in Java, while scaling to more demanding problems.
+## Citing StreamingRandomPatches
+To cite this SRP in a publication, please cite the following paper: 
+> Heitor Murilo Gomes,  Jesse Read, Albert Bifet. 
+> Streaming Random Patches for Evolving Data Stream Classification. In IEEE International Conference on Data Mining (ICDM), IEEE, 2019.
 
-http://moa.cms.waikato.ac.nz/
+## Important source files
+If you are here, then you are probably looking for the implementations used in the original paper, in this case, you only need to look for StreamingRandomPatches.java
 
-## Using MOA
+## How to execute it
+To test StreamingRandomPatches you can copy and paste the following command in the interface (right click the configuration text edit and select "Enter configuration”).
+Sample command: 
 
-* [Getting Started](http://moa.cms.waikato.ac.nz/getting-started/)
-* [Documentation](http://moa.cms.waikato.ac.nz/documentation/)
-* [About MOA](http://moa.cms.waikato.ac.nz/details/)
+`EvaluateInterleavedTestThenTrain -l (meta.StreamingRandomPatches -l (trees.HoeffdingTree -g 50 -c 0.01) -s 100 -o (Percentage (M * (m / 100))) -c 60 -a 6) -i 100000000 -f 100000000 -s (ArffFileStream -f elecNormNew.arff)`
 
-MOA performs BIG DATA stream mining in real time, and large scale machine learning. MOA can be extended with new mining algorithms, and new stream generators or evaluation measures. The goal is to provide a benchmark suite for the stream mining community. 
-
-## Mailing lists
-* MOA users: http://groups.google.com/group/moa-users
-* MOA developers: http://groups.google.com/group/moa-development
-
-## Citing MOA
-If you want to refer to MOA in a publication, please cite the following JMLR paper: 
-
-> Albert Bifet, Geoff Holmes, Richard Kirkby, Bernhard Pfahringer (2010);
-> MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604 
-
-
+Explanation: this command executes a interleaved test then train evaluation on SRP with 100 classifiers (-s 100) using 60% of the features to build each subspace (-c 60 and -o (Percentage (M * (m / 100))))
+on the ELEC dataset (-f elecNormNew.arff). 
+**Make sure to extract the elecNormNew.arff dataset, and setting -f to its location, before executing the command.**
