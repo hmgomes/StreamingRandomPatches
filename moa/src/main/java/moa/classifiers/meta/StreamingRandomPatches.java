@@ -1,3 +1,21 @@
+/*
+ *    AdaptiveRandomForest.java
+ *
+ *    @author Heitor Murilo Gomes (heitor dot gomes at waikato dot ac dot nz)
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *
+ */
 package moa.classifiers.meta;
 
 import com.github.javacliparser.FlagOption;
@@ -22,8 +40,38 @@ import moa.options.ClassOption;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Streaming Random Patches
+ *
+ * <p>Streaming Random Patches (SRP). This ensemble method uses a hoeffding tree by default,
+ * but it can be used with any other base model (differently from random forest variations).
+ * This algorithm can be used to simulate bagging or random subspaces, see parameter -t.
+ * The default algorithm uses both bagging and random subspaces, namely Random Patches.</p>
+ *
+ * <p>See details in:<br> Heitor Murilo Gomes, Jesse Read, Albert Bifet.
+ * Streaming Random Patches for Evolving Data Stream Classification.
+ * IEEE International Conference on Data Mining (ICDM), 2019.</p>
+ *
+ * <p>Parameters:</p> <ul>
+ * <li>-l : Classiﬁer to train. Default to a Hoeffding Tree, but it is not restricted to decision trees.</li>
+ * <li>-s : The number of learners in the ensemble.</li>
+ * <li>-o : How the number of features is interpreted (4 options):
+ * "Specified m (integer value)", "sqrt(M)+1", "M-(sqrt(M)+1)".</li>
+ * <li>-m : Number of features allowed considered for each split. Negative values corresponds to M - m.</li>
+ * <li>-t : The training method to use: Random Patches, Random Subspaces or Bagging.</li>
+ * <li>-a : The lambda value for the poisson distribution (used to emulate bagging).</li>
+ * <li>-x : Change detector for drifts and its parameters.</li>
+ * <li>-p : Change detector for warnings.</li>
+ * <li>-w : Should use weighted voting?</li>
+ * <li>-u : Should use drift detection? If disabled, then the bkg learner is also disabled.</li>
+ * <li>-q : Should use bkg learner? If disabled, then trees are reset immediately.</li>
+ * </ul>
+ *
+ * @author Heitor Murilo Gomes (heitor dot gomes at waikato dot ac dot nz)
+ * @version $Revision: 1 $
+ */
 public class StreamingRandomPatches extends AbstractClassifier implements MultiClassClassifier,
-                                                                          CapabilitiesHandler {
+        CapabilitiesHandler {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +79,7 @@ public class StreamingRandomPatches extends AbstractClassifier implements MultiC
             "Classifier to train on instances.", Classifier.class, "trees.HoeffdingTree -g 50 -c 0.01");
 
     public IntOption ensembleSizeOption = new IntOption("ensembleSize", 's',
-            "The number of models.", 10, 1, Integer.MAX_VALUE);
+            "The number of models.", 100, 1, Integer.MAX_VALUE);
 
     // SUBSPACE CONFIGURATION
     public MultiChoiceOption subspaceModeOption = new MultiChoiceOption("subspaceMode", 'o',
@@ -40,12 +88,12 @@ public class StreamingRandomPatches extends AbstractClassifier implements MultiC
                     "Percentage (M * (m / 100))"},
             new String[]{"SpecifiedM", "SqrtM1", "MSqrtM1", "Percentage"}, 3);
 
-    public IntOption subspaceSizeOption = new IntOption("subspaceSize", 'c',
+    public IntOption subspaceSizeOption = new IntOption("subspaceSize", 'm',
             "# attributes per subset for each classifier. Negative values = totalAttributes - #attributes", 60, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
     // TRAINING
     public MultiChoiceOption trainingMethodOption = new MultiChoiceOption("trainingMethod", 't',
-            "How to proceed with subspace resets.",
+            "The training method to use: Random Patches, Random Subspaces or Bagging.",
             new String[]{"Random Subspaces", "Resampling (bagging)", "Random Patches"},
             new String[]{"RandomSubspaces", "Resampling", "RandomPatches"}, 2);
 
@@ -63,12 +111,12 @@ public class StreamingRandomPatches extends AbstractClassifier implements MultiC
     public FlagOption disableWeightedVote = new FlagOption("disableWeightedVote", 'w',
             "Should use weighted voting?");
 
-    // DISABLING DRIFT DETECTION and BKG LEARNER
+    // DISABLING DRIFT DETECTION and BKG LEARNER (warning is also disabled in this case)
     public FlagOption disableDriftDetectionOption = new FlagOption("disableDriftDetection", 'u',
-            "Should use drift detection? If disabled then bkg learner is also disabled");
+            "Should use drift detection? If disabled, then the bkg learner is also disabled.");
 
     public FlagOption disableBackgroundLearnerOption = new FlagOption("disableBackgroundLearner", 'q',
-            "Should use bkg learner? If disabled then reset tree immediately.");
+            "Should use bkg learner? If disabled, then trees are reset immediately.");
 
     public static final int TRAIN_RANDOM_SUBSPACES = 0;
     public static final int TRAIN_RESAMPLING = 1;
