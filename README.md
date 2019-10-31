@@ -1,5 +1,5 @@
 # StreamingRandomPatches
-Repository for the StreamingRandomPatches (also known as SRP) algorithm implemented (originally) in MOA 2017.10. 
+This is the repository for the StreamingRandomPatches (SRP) algorithm implemented (originally) in MOA 2017.10. 
 The algorithm has been ported to MOA 2019.04 in this repository. 
 
 The Streaming Random Patches (SRP) algorithm is going to be added to MOA in the near future.
@@ -13,8 +13,8 @@ To cite this SRP in a publication, please cite the following paper:
 > Heitor Murilo Gomes,  Jesse Read, Albert Bifet. 
 > Streaming Random Patches for Evolving Data Stream Classification. In IEEE International Conference on Data Mining (ICDM), IEEE, 2019.
 
-## Important source files
-If you are here, then you are probably looking for the implementations used in the original paper, in this case, you only need to look for StreamingRandomPatches.java
+## Datasets
+The datasets and synthetic data streams are available in the `\dataset` directory.
 
 ## How to execute it
 To test StreamingRandomPatches you can copy and paste the following command in the interface (right click the configuration text edit and select "Enter configuration”).
