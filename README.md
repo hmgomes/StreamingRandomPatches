@@ -10,7 +10,7 @@ http://moa.cms.waikato.ac.nz
 
 ## Citing StreamingRandomPatches
 To cite this SRP in a publication, please cite the following paper: 
-> Heitor Murilo Gomes,  Jesse Read, Albert Bifet. 
+> Heitor Murilo Gomes, Jesse Read, Albert Bifet. 
 > Streaming Random Patches for Evolving Data Stream Classification. In IEEE International Conference on Data Mining (ICDM), IEEE, 2019.
 
 ## Datasets
