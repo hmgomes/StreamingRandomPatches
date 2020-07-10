@@ -20,7 +20,7 @@ The datasets and synthetic data streams are available in the `\dataset` director
 To test StreamingRandomPatches you can copy and paste the following command in the interface (right click the configuration text edit and select "Enter configuration”).
 Sample command: 
 
-`EvaluateInterleavedTestThenTrain -l (meta.StreamingRandomPatches -l (trees.HoeffdingTree -g 50 -c 0.01) -s 100 -o (Percentage (M * (m / 100))) -c 60 -a 6) -i 100000000 -f 100000000 -s (ArffFileStream -f elecNormNew.arff)`
+`EvaluateInterleavedTestThenTrain -l (meta.StreamingRandomPatches -l (trees.HoeffdingTree -g 50 -c 0.01) -s 100 -o (Percentage (M * (m / 100))) -m 60 -a 6) -i 100000000 -f 100000000 -s (ArffFileStream -f elecNormNew.arff)`
 
 Explanation: this command executes a interleaved test then train evaluation on SRP with 100 classifiers (-s 100) using 60% of the features to build each subspace (-m 60 and -o (Percentage (M * (m / 100))))
 on the ELEC dataset (-f elecNormNew.arff). 
