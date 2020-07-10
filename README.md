@@ -22,6 +22,6 @@ Sample command:
 
 `EvaluateInterleavedTestThenTrain -l (meta.StreamingRandomPatches -l (trees.HoeffdingTree -g 50 -c 0.01) -s 100 -o (Percentage (M * (m / 100))) -c 60 -a 6) -i 100000000 -f 100000000 -s (ArffFileStream -f elecNormNew.arff)`
 
-Explanation: this command executes a interleaved test then train evaluation on SRP with 100 classifiers (-s 100) using 60% of the features to build each subspace (-c 60 and -o (Percentage (M * (m / 100))))
+Explanation: this command executes a interleaved test then train evaluation on SRP with 100 classifiers (-s 100) using 60% of the features to build each subspace (-m 60 and -o (Percentage (M * (m / 100))))
 on the ELEC dataset (-f elecNormNew.arff). 
 **Make sure to extract the elecNormNew.arff dataset, and setting -f to its location, before executing the command.**
